@@ -1,0 +1,43 @@
+{
+  "_comment_guard_003": "FIVE-NAME MATCH: {{SERVER_NAME}} must equal plugin.json.name, plugin.json.channels[].server (channel plugins), .mcp.json mcpServers key, new Server({ name }) in server.ts, and any skill prefix. See mcp-forge GUARD-003. Silent breakage if mismatched.",
+  "_comment_layout": "This file is a combined scaffold. On publish, split into two files: .claude-plugin/plugin.json (the top 'plugin' object) and .mcp.json (the top 'mcp' object). Do NOT ship this combined file.",
+
+  "plugin": {
+    "name": "{{SERVER_NAME}}",
+    "version": "0.1.0",
+    "description": "{{DESCRIPTION}}",
+    "author": {
+      "name": "Eidos AGI",
+      "url": "https://eidosagi.com"
+    },
+    "license": "MIT",
+    "keywords": ["mcp", "claude-code", "{{SERVER_NAME}}"],
+    "_channels_note": "Only include 'channels' if this is a channel plugin. Value of 'server' MUST equal the top-level 'name' (GUARD-003).",
+    "channels": [
+      { "server": "{{SERVER_NAME}}" }
+    ]
+  },
+
+  "mcp": {
+    "_comment_paths": "Never use absolute paths. Always ${CLAUDE_PLUGIN_ROOT} so the plugin works on any machine.",
+    "_comment_start_script": "slack-cc learning: marketplace plugins do NOT auto-run 'npm install'. The package.json 'start' script MUST include 'npm install --no-fund --no-audit --silent && tsx server.ts' — otherwise the plugin fails on first use on every machine.",
+    "mcpServers": {
+      "{{SERVER_NAME}}": {
+        "command": "npm",
+        "args": ["start", "--prefix", "${CLAUDE_PLUGIN_ROOT}"]
+      }
+    }
+  },
+
+  "_python_variant": {
+    "_comment": "For Python plugins, replace the mcpServers block with this shape:",
+    "mcpServers": {
+      "{{SERVER_NAME}}": {
+        "command": "uv",
+        "args": ["run", "--project", "${CLAUDE_PLUGIN_ROOT}", "python", "${CLAUDE_PLUGIN_ROOT}/server.py"]
+      }
+    }
+  },
+
+  "_dev_flag_note": "Channel plugins from private marketplaces require `claude --dangerously-load-development-channels` during development. Document this in README.md so users aren't mystified when the plugin doesn't load."
+}
