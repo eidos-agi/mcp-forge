@@ -52,6 +52,7 @@ Use CLI when:
 - **Capabilities**: declare `tools`, `experimental/claude/channel`, `experimental/claude/channel/permission` as needed
 - **Testing**: tool-level unit tests + integration smoke tests
 - **Distribution**: Eidos marketplace packaging (plugin.json, .mcp.json with ${CLAUDE_PLUGIN_ROOT})
+- **Recall pattern**: cooperative polling for tools that wait on external processes. See `patterns/recall-pattern.md` for the design, `patterns/recall.py` for the reusable utility. Any tool that waits on CI, deploys, migrations, or builds should use this instead of returning immediately and forcing the agent to rapid-poll.
 
 ## Key Learnings (from slack-cc build)
 
